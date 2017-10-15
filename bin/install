@@ -1,0 +1,51 @@
+#!/bin/env bash
+
+# global for error reporting
+ASDF_MAVEN_ERROR=""
+
+# Download Maven source from Apache, build, copy files and cleanup.
+install_maven() {
+	local version=$1
+	local destdir=$2
+
+	get_maven $version $destdir
+	[[ -z "$ASDF_MAVEN_ERROR" ]] || return
+
+	build_and_install_maven $version $destdir
+}
+
+# Download Maven source from Apache
+#
+# TODO: Capture errors from curl.
+get_maven() {
+	local version=$1
+	local destdir=$2
+
+	local major=$(echo $version | cut -d '.' -f 1)
+	local url="http://apache.mesi.com.ar//maven"\
+		"/maven-$major/$version/source/apache-maven-$version-src.tar.gz"
+
+	echo url
+
+	curl -fLC - --retry 3 --retry-delay 3 -o $destdir/$version.tar.gz $url
+}
+
+# Build Maven, copy files and cleanup.
+build_copy_cleaup() {
+	local version=$1
+	local destdir=$2
+
+	local origin=$(pwd)
+	cd $destdir; {
+		tar xzvf $version.tar.gz && rm $version.tar.gz
+	}
+	cd $origin
+}
+
+#
+# MAIN
+#
+install_maven $ASDF_INSTALL_VERSION $ASDF_INSTALL_PATH
+
+[[ -z "$ASDF_MAVEN_ERROR" ]] || echo "ERROR: $ASDF_MAVEN_ERROR."
+unset ASDF_MAVEN_ERROR
