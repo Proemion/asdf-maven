@@ -11,7 +11,7 @@ install_maven() {
 	get_maven $version $destdir
 	[[ -z "$ASDF_MAVEN_ERROR" ]] || return
 
-	build_and_install_maven $version $destdir
+	build_copy_cleanup $version $destdir
 }
 
 # Download Maven source from Apache
@@ -22,22 +22,24 @@ get_maven() {
 	local destdir=$2
 
 	local major=$(echo $version | cut -d '.' -f 1)
-	local url="http://apache.mesi.com.ar//maven"\
-		"/maven-$major/$version/source/apache-maven-$version-src.tar.gz"
-
-	echo url
+	local base="http://mirror.olnevhost.net/pub/apache//maven"
+	local url="$base/maven-$major/$version/binaries/apache-maven-$version-bin.tar.gz"
 
 	curl -fLC - --retry 3 --retry-delay 3 -o $destdir/$version.tar.gz $url
 }
 
 # Build Maven, copy files and cleanup.
-build_copy_cleaup() {
+build_copy_cleanup() {
 	local version=$1
 	local destdir=$2
 
 	local origin=$(pwd)
 	cd $destdir; {
-		tar xzvf $version.tar.gz && rm $version.tar.gz
+		tar xzvf $version.tar.gz
+		rm $version.tar.gz
+
+		mv apache-maven-$version/* .
+		rmdir apache-maven-$version
 	}
 	cd $origin
 }
