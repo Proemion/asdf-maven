@@ -1,4 +1,4 @@
-# asdf-java
+# asdf-maven
 
 [Maven](https://en.wikipedia.org/wiki/Apache_Maven)
 plugin for the [asdf](https://github.com/asdf-vm/asdf) version manager.
