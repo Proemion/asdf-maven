@@ -22,10 +22,10 @@ get_maven() {
 	local destdir=$2
 
 	local major=$(echo $version | cut -d '.' -f 1)
-	local base="http://mirror.olnevhost.net/pub/apache//maven"
+	local base="https://archive.apache.org/dist/maven"
 	local url="$base/maven-$major/$version/binaries/apache-maven-$version-bin.tar.gz"
 
-	curl -fLC - --retry 3 --retry-delay 3 -o $destdir/$version.tar.gz $url
+	curl -fLC - --retry 3 --retry-delay 3 -o "$destdir/$version.tar.gz" "$url"
 }
 
 # Build Maven, copy files and cleanup.
@@ -34,7 +34,7 @@ build_copy_cleanup() {
 	local destdir=$2
 
 	local origin=$(pwd)
-	cd $destdir; {
+	cd "$destdir"; {
 		tar xzvf $version.tar.gz
 		rm $version.tar.gz
 
