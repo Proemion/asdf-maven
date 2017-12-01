@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# if asdf provides java, then let's use that rather the system one (if at all avail)
+if asdf current java > /dev/null 2>&1 ; then
+	_JAVA_VERSION=$(asdf current java | cut -f1 -d' ')
+	export JAVA_HOME=$(asdf where java "$_JAVA_VERSION")
+	echo "Set java_home to: $JAVA_HOME"
+fi
