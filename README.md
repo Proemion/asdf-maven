@@ -9,7 +9,7 @@ After installing [asdf](https://github.com/asdf-vm/asdf),
 you can add this plugin like this:
 
 ```bash
-asdf plugin-add maven https://github.com/skotchpine/asdf-maven
+asdf plugin-add maven https://github.com/Proemion/asdf-maven
 ```
 
 and install new versions like this:
